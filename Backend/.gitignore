@@ -1,0 +1,92 @@
+# ----------------------
+# OS Generated Files
+# ----------------------
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ----------------------
+# Logs & Runtime Files
+# ----------------------
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# ----------------------
+# Environment Variables
+# ----------------------
+.env
+.env.*
+*.env
+
+# ----------------------
+# Node.js
+# ----------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+pnpm-lock.yaml
+
+# ----------------------
+# Python
+# ----------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+venv/
+env/
+.venv/
+*.sqlite3
+
+# ----------------------
+# Java
+# ----------------------
+*.class
+*.jar
+*.war
+*.ear
+target/
+
+# ----------------------
+# C / C++
+# ----------------------
+*.o
+*.out
+*.exe
+
+# ----------------------
+# IDE / Editors
+# ----------------------
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+
+# ----------------------
+# Build Outputs
+# ----------------------
+dist/
+build/
+out/
+coverage/
+
+# ----------------------
+# Mac / Linux temp files
+# ----------------------
+*.tmp
+*.temp
+*.cache
+
+# ----------------------
+# Git
+# ----------------------
+*.orig
