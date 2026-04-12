@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Theater } from "./theaterModel";
+import { TheaterSchema } from "./theaterValidation";
 
 
 export const createTheater = async (req: Request, res: Response) => {
@@ -9,7 +10,7 @@ export const createTheater = async (req: Request, res: Response) => {
     if (!parsedData.success) {
       return res.status(400).json({
         msg: "Invalid data",
-        errors: parsedData.error.errors
+        errors: parsedData.error
       });
     }
 
