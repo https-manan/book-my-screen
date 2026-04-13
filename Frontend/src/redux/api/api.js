@@ -1,0 +1,100 @@
+import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
+
+const USER_API='http://localhost:8080/api/v1/';
+
+export const appApi = createApi({
+    reducerPath:"api",
+    baseQuery:fetchBaseQuery({
+        baseUrl:USER_API,
+        credentials:"include"
+    }),
+    endpoints:(build)=>({
+        createMovie:build.mutation({
+            query:({formData})=>({
+                url:"/movie/createMovie",
+                method:"POST",
+                body:formData,
+            })
+        }),
+        getAllMovies:build.query({
+            query:()=>({
+                url:'/movie/all',
+                method:"GET"
+            })
+        }),
+        getMovieById:build.query({
+            query:({id})=>({
+                url:`/movie/${id}`,
+                method:"GET",
+                credentials:"include"
+            })
+        }),
+        getRecommendedMovies:build.query({
+            query:()=>({
+                url:'/movie/recommended',
+                method:"GET"
+            })
+        }),
+        createTheater:build.mutation({
+            query:({formData})=>({
+                url:'/theater/create',
+                method:"POST",
+                body:formData
+            })
+        }),
+        getAllTheaters:build.query({
+            query:()=>({
+                url:"/theater/all",
+                method:"GET"
+            })
+        }),
+        getTheaterByState:build.query({
+            query:({state})=>({
+                url:`/theater?state=${state}`,
+                method:"GET",
+            })
+        }),
+        createShow:build.mutation({
+            query:({formData})=>({
+                url:'/show/',
+                method:"POST",
+                body:formData,
+                credentials:"include"
+            })
+        }),
+        getShowById:build.query({
+            query:({id})=>({
+                url:`/show/${id}`,
+                method:'GET'
+            })
+        }),
+        updateSeatStatus:build.mutation({
+            query:({showId,formData})=>({
+                url:`/show/${showId}`,
+                method:"PUT",
+                body:formData
+            })
+        }),
+        getMovieByDateAndLocation:build.query({
+            query:()=>({
+                url:"/show/",
+                method:"GET"
+            })
+        })
+    }),
+})
+
+
+export const {
+    useCreateMovieMutation,
+    useGetAllMoviesQuery,
+    useGetMovieByIdQuery,
+    useGetRecommendedMoviesQuery,
+    useCreateTheaterMutation,
+    useGetAllTheatersQuery,
+    useGetTheaterByStateQuery,
+    useCreateShowMutation,
+    useGetMovieByDateAndLocationQuery,
+    useGetShowByIdQuery,
+    useUpdateSeatStatusMutation,
+}=appApi; 

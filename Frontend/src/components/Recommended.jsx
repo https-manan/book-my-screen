@@ -1,8 +1,9 @@
 import React from "react"
 import { movies } from "../utils/constants"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 const Recommended = () => {
+  const navigate = useNavigate();
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">'
     <div className="flex justify-between">
@@ -12,6 +13,7 @@ const Recommended = () => {
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 cursor-pointer">
         {movies.map((movie) => (
           <div
+            onClick={()=>{navigate(`/movies/${movie.id}`)}}
             key={movie.id}
             className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300"
           >

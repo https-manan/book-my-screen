@@ -4,6 +4,8 @@ import Profile from './components/Profile'
 import Movies from './components/Movies'
 import MainLayout from './components/MainLayout'
 import Home from './components/Home'
+import MovieDetails from './components/MovieDetails'
+import BookingHistory from './components/BookingHistory'
 
 const appRouter=createBrowserRouter([
   {
@@ -21,6 +23,14 @@ const appRouter=createBrowserRouter([
       {
         path:'movies',
         element:<Movies/>
+      },
+      {
+        path:'/movies/:id',
+        element:<MovieDetails/>
+      },
+      {
+        path:'/order-history/:id',
+        element:<BookingHistory/>
       }
     ]
   }
