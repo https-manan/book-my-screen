@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
 import { IShow } from "./showInterface";
 
 const showSchema = new mongoose.Schema<IShow>({
@@ -62,4 +62,4 @@ const showSchema = new mongoose.Schema<IShow>({
   ]
 }, { timestamps: true });
 
-export const Show = mongoose.model<IShow>("Show", showSchema);
+export const Show: Model<IShow> = mongoose.model<IShow>("Show", showSchema);

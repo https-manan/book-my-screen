@@ -3,7 +3,7 @@ import { createShow, getShowById, getShowByMovieDateLocation, updateSeatStatus }
 const route = express.Router();
 
 route.post("/", createShow)
-route.get("/", getShowByMovieDateLocation)
+route.get("/movie/:movieId", getShowByMovieDateLocation) //Here in query date and loc
 route.get("/:id", getShowById)
 route.put("/:showId", updateSeatStatus)
 
