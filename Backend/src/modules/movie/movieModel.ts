@@ -2,59 +2,54 @@ import mongoose from "mongoose";
 import { IMovie } from "./movieInterface";
 
 const movieSchema = new mongoose.Schema<IMovie>({
-  title:
-  {
+  title:{
     type: String,
     required: true
   },
-
-  description:
-  {
+  description:{
     type: String,
     required: true
   },
-  duration:
-  {
-    type: String,
+  duration:{
+    type: Number,
     required: true
   },
-  genre:
-  {
+  genre:{
     type: [String],
     required: true
   },
-  releaseDate:
-  {
+  releaseDate:{
     type: Date,
     required: true
   },
-  languages:
-  {
+  languages:{
     type: [String],
     required: true
   },
-  certification:
-  {
+  certification:{
     type: String,
     required: true
   },
-  posterUrl:
-  {
-    type: String,
-    required: true
+  posterUrl:{
+    public_id: {
+      type: String,
+      required: true
+    },
+    secure_url: {
+      type: String
+    }
   },
-  rating:
-  {
+  rating:{
     type: Number,
-    required: true
+    required: true,
+    default:0
   },
-  votes:
-  {
+  votes:{
     type: Number,
-    required: true
+    required: true,
+    default:0
   },
-  format:
-  {
+  format:{
     type: [String],
     default: ["2D"]
   }

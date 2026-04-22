@@ -1,10 +1,12 @@
 import express from 'express'
 import { createMovie, getAllMovies, getMoviesById, getTopRecMovies } from './movieController';
+import { upload } from '../../cloudinary/multer';
 const route =express.Router();
 
-route.post('/createMovie', createMovie);
-route.get('/all', getAllMovies);
-route.get('/:id', getMoviesById);
-route.get('/recommended', getTopRecMovies);
 
-export default route;  
+route.post('/',upload.single('imagePath'),createMovie);
+route.get('/all', getAllMovies);
+route.get('/recommended', getTopRecMovies);
+route.get('/:id', getMoviesById);
+
+export default route;
