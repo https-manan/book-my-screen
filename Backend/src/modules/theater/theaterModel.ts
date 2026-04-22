@@ -11,8 +11,14 @@ const theaterSchema = new mongoose.Schema<ITheater>({
     required: true
   },
   logo: {
-    type: String,
-    required: true
+    public_id:{
+      type: String,
+      required: true
+    },
+    secure_url:{
+      type: String,
+      required: true
+    }
   },
   city: {
     type: String,
