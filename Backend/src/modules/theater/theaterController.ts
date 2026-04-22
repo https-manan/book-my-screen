@@ -57,7 +57,7 @@ export const getAllTheater = async (_: Request, res: Response) => {
 
 export const getTheaterByState = async (req: Request, res: Response) => {
   try {
-    const { state } = req.query;
+    const {state} = req.query;
     if (!state) {
       return res.status(400).json({
         msg: "State query parameter is required"
