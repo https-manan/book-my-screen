@@ -1,5 +1,4 @@
 
-
 export interface ITheater{
     _id:string,
     name:string,

@@ -1,94 +1,134 @@
-// seed/showSeeder.ts
 import mongoose from "mongoose";
-import dayjs from "dayjs";
-import { config } from "../config/config";
-import { generateSeatLayout } from "../utils/index"
+import dotenv from "dotenv";
 import { Movie } from "../modules/movie/movieModel";
 import { Theater } from "../modules/theater/theaterModel";
+import { generateSeatLayout } from "../utils";
 import { Show } from "../modules/show/showModel";
+dotenv.config();
 
-
-const generatePriceMap = () =>
-  new Map([
-    ["PREMIUM", 510],
-    ["EXECUTIVE", 290],
-    ["NORMAL", 270],
-  ]);
-
-const formats = ["2D", "3D", "IMAX", "PVR PXL"];
-
-// 🎞️ Realistic time slots
-const fixedTimeSlots = [
-  { start: "09:00 AM", end: "11:30 AM" },
-  { start: "12:30 PM", end: "03:00 PM" },
-  { start: "04:00 PM", end: "06:30 PM" },
-  { start: "07:30 PM", end: "10:00 PM" },
-  { start: "10:30 PM", end: "01:00 AM" },
-];
-
-const toDateWithTime = (baseDate: Date, timeStr: string) => {
-  return dayjs(baseDate)
-    .hour(dayjs(timeStr, ["hh:mm A"]).hour())
-    .minute(dayjs(timeStr, ["hh:mm A"]).minute())
-    .second(0)
-    .toDate();
-};
-
-export const seedShow = async () => {
-  const movieIds = ["68e224451aeabaafaa43ac58", "68e224451aeabaafaa43ac57"];
-  const movies = await Movie.find({ _id: { $in: movieIds } });
-  const theatres = await Theater.find({ state: "West Bengal" });
-
-  if (!movies.length || !theatres.length) {
-    console.error("Movies or theatres not found. Please check IDs or state name.");
-    return;
-  }
-
-  const today = dayjs().startOf("day");
-
-  for (const movie of movies) {
-    for (const theatre of theatres) {
-      for (let d = 0; d < 2; d++) { // ✅ today and tomorrow
-        const showDate = today.add(d, "day");
-        const formattedDate = showDate.format("DD-MM-YYYY");
-        const numShows = Math.floor(Math.random() * 3) + 2; // 2–4 shows
-        const selectedSlots = fixedTimeSlots.slice(0, numShows);
-
-        for (const slot of selectedSlots) {
-          const startTime = toDateWithTime(showDate.toDate(), slot.start);
-          const endTime = toDateWithTime(showDate.toDate(), slot.end);
-
-          const newShow = new Show({
-            movie: movie._id,
-            theater: theatre._id,
-            location: theatre.state,
-            format: formats[Math.floor(Math.random() * formats.length)],
-            audioType: "Dolby 7.1",
-            startTime: slot.start, 
-            date: formattedDate, // ✅ "DD-MM-YYYY"
-            priceMap: generatePriceMap(),
-            seatLayout: generateSeatLayout(),
-          });
-
-          await newShow.save();
-          console.log(
-            `🎬 Show created for ${movie.title} at ${theatre.name} on ${formattedDate} (${slot.start} - ${slot.end})`
-          );
-        }
-      }
+const seed = async () => {
+  try {
+    await mongoose.connect(process.env.DB_URL!);
+    console.log("Connected to DB");
+    const movies = await Movie.find().limit(5);
+    const theaters = await Theater.find().limit(4);
+    if (movies.length === 0 || theaters.length === 0) {
+      console.error("❌ No movies or theaters found. Please run movie and theater seeds first.");
+      process.exit(1);
     }
-  }
+    await Show.deleteMany();
+    console.log("Cleared existing shows");
 
-  console.log("✅ Show seeding completed for selected movies in West Bengal.");
+    const shows = [
+      {
+        movie: movies[0]._id,      // Inception
+        theater: theaters[0]._id,  // PVR Noida
+        location: "Noida",
+        format: "IMAX",
+        audioType: "Dolby Atmos",
+        date: new Date("2026-04-23"),
+        startTime: new Date("2026-04-23T10:00:00"),
+        seatLayout: generateSeatLayout(),
+      },
+      {
+        movie: movies[0]._id,      // Inception
+        theater: theaters[0]._id,  // PVR Noida
+        location: "Noida",
+        format: "2D",
+        audioType: "Dolby Atmos",
+        date: new Date("2026-04-23"),
+        startTime: new Date("2026-04-23T10:00:00"),
+        seatLayout: generateSeatLayout(),
+      },
+      {
+        movie: movies[0]._id,      // Inception
+        theater: theaters[1]._id,  // INOX Noida
+        location: "Noida",
+        format: "3D",
+        audioType: "Dolby Atmos",
+        date: new Date("2026-04-23"),
+        startTime: new Date("2026-04-23T10:00:00"),
+        seatLayout: generateSeatLayout(),
+      },
+      {
+        movie: movies[1]._id,      // Interstellar
+        theater: theaters[0]._id,  // PVR Noida
+        location: "Noida",
+        format: "IMAX",
+        audioType: "Dolby Atmos",
+        date: new Date("2026-04-23"),
+        startTime: new Date("2026-04-23T10:00:00"),
+        seatLayout: generateSeatLayout(),
+      },
+      {
+        movie: movies[1]._id,      // Interstellar
+        theater: theaters[2]._id,  // Cinepolis Noida
+        location: "Noida",
+        format: "2D",
+        audioType: "Dolby Atmos",
+        date: new Date("2026-04-23"),
+        startTime: new Date("2026-04-23T10:00:00"),
+        seatLayout: generateSeatLayout(),
+      },
+      {
+        movie: movies[2]._id,      // The Dark Knight
+        theater: theaters[1]._id,  // INOX Noida
+        location: "Noida",
+        format: "2D",
+        audioType: "Dolby Atmos",
+        date: new Date("2026-04-23"),
+        startTime: new Date("2026-04-23T10:00:00"),
+        seatLayout: generateSeatLayout(),
+      },
+      {
+        movie: movies[2]._id,      // The Dark Knight
+        theater: theaters[3]._id,  // PVR Delhi
+        location: "Delhi",
+        format: "IMAX",
+        audioType: "Dolby Atmos",
+        date: new Date("2026-04-23"),
+        startTime: new Date("2026-04-23T10:00:00"),
+        seatLayout: generateSeatLayout(),
+      },
+      {
+        movie: movies[3]._id,      // Avengers Endgame
+        theater: theaters[2]._id,  // Cinepolis Noida
+        location: "Noida",
+        format: "3D",
+        audioType: "Dolby Atmos",
+        date: new Date("2026-04-23"),
+        startTime: new Date("2026-04-23T10:00:00"),
+        seatLayout: generateSeatLayout(),
+      },
+      {
+        movie: movies[3]._id,      // Avengers Endgame
+        theater: theaters[3]._id,  // PVR Delhi
+        location: "Delhi",
+        format: "IMAX",
+        audioType: "Dolby Atmos",
+        date: new Date("2026-04-23"),
+        startTime: new Date("2026-04-23T10:00:00"),
+        seatLayout: generateSeatLayout(),
+      },
+      {
+        movie: movies[4]._id,      // Oppenheimer
+        theater: theaters[0]._id,  // PVR Noida
+        location: "Noida",
+        format: "IMAX",
+        audioType: "Dolby Atmos",
+        date: new Date("2026-04-23"),
+        startTime: new Date("2026-04-23T10:00:00"),
+        seatLayout: generateSeatLayout(),
+      },
+    ];
+
+    const inserted = await Show.insertMany(shows);
+    console.log(`✅ Seeded ${inserted.length} shows successfully`);
+    process.exit(0);
+  } catch (error) {
+    console.error("❌ Error seeding shows:", error);
+    process.exit(1);
+  }
 };
 
-mongoose
-  .connect(config.databaseUrl as string)
-  .then(async () => {
-    console.log("DB connected");
-    await Show.deleteMany({});
-    console.log("🧹 Existing shows deleted.");
-    await seedShow();
-    mongoose.disconnect();
-  })
-  .catch((err) => console.log(err));
+seed();

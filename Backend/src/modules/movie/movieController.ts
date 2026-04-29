@@ -15,13 +15,13 @@ export const createMovie = async (req:Request,res:Response)=>{
         }
         if(!req.file){
             return res.status(400).json({
-                msg:"Image is required"
+                msg:"Poster is required"
             })
         }
         const imagePath=req.file.path;
         const result =await uploadImage(imagePath);
         fs.unlinkSync(imagePath) //This is to del the image from my local folder after being uploaded
-        const movie = await Movie.create({...req.body, posterUrl: { public_id: result.public_id, secure_url: result.secure_url }})
+        const movie = await Movie.create({...req.body, posterUrl: {public_id:result.public_id,secure_url:result.secure_url}})
         return res.status(201).json({
             movie,
             msg:"Movie created successfully."
@@ -75,10 +75,10 @@ export const getMoviesById =async(req:Request,res:Response)=>{
 
 export const getTopRecMovies = async(req:Request,res:Response)=>{
     try {
-        const movies = await Movie.find().sort({rating:-1}).limit(10);
+        const movies = await Movie.find().sort({rating:-1}).limit(10); //This means sort by rating and -1 is means in decending order  
         if(movies.length===0){
             return res.status(404).json({
-                msg:'no movie found'
+                msg:'No movie found'
             })
         }
         return res.status(200).json({

@@ -1,9 +1,9 @@
 import express from 'express'
-import { createShow, getShowById, getShowByMovieDateLocation, updateSeatStatus } from './showController';
+import { createShow, getShowById, getShowByMovieStateLocation, updateSeatStatus } from './showController';
 const route = express.Router();
 
 route.post("/", createShow)
-route.get("/movie/:movieId", getShowByMovieDateLocation) //Here in query date and loc
+route.get("/movie/:movieId", getShowByMovieStateLocation) //Here in query date and loc
 route.get("/:id", getShowById)
 route.put("/:showId", updateSeatStatus)
 

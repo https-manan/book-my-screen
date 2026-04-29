@@ -49,7 +49,7 @@ export const getAllUsers = async(req:Request,res:Response)=>{
 
 export const getUserById=async(req:Request,res:Response)=>{
     try {
-        const {id} = req.params;
+        const {id} = req.user?._id;
         const user =await User.findById(id);
         if(!user)return res.status(404).json({
             msg:"User not found"
@@ -67,7 +67,7 @@ export const getUserById=async(req:Request,res:Response)=>{
 
 export const activateUser = async(req:Request,res:Response)=>{
     try {
-        const {id} = req.params;
+        const {id} = req.user?._id;
         const userStatus = req.body;
         const user=await User.findById(id);
         if(!user)return res.status(400).json({msg:"User not found"});
