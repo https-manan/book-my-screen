@@ -1,7 +1,10 @@
 import SliderModule from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
-import { banners } from "../utils/constants"
+import { useGetRecommendedMoviesQuery } from "../redux/api/api"
+import { useEffect } from "react"
+import { toast } from 'sonner';
+import { Loader2 } from "lucide-react"
 
 const Slider = SliderModule.default
 
@@ -13,21 +16,30 @@ const Banner = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 2000,
   }
+  const {data,isLoading,error}= useGetRecommendedMoviesQuery();
+
+  useEffect(()=>{
+    if(error){
+      toast("Failed to load movies")
+    }
+  },[error])
   return (
     <div className="w-full max-w-7xl mx-auto mt-4">
-      <Slider {...settings}>
-        {banners.map((b, i) => (
-          <div key={i} className="px-2">
+      {
+        isLoading?<Loader2/>:<Slider {...settings}>
+        {data?.movies.map((b) => (
+          <div key={b._id} className="px-2">
             <img
-              src={b}
-              alt={`banner-${i}`}
+              src={b.posterUrl.secure_url}
+              alt={`banner-${b._id}`}
               className="w-full h-[300px] object-cover rounded-2xl shadow-lg"
             />
           </div>
         ))}
       </Slider>
+      }
     </div>
   )
 }

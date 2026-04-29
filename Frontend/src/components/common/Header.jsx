@@ -1,11 +1,13 @@
 import { Search } from "lucide-react"
-import logo from '../assets/logo.png'
+import logo from '../../assets/logo.png'
 import { Link } from "react-router-dom"
-import { useContext } from "react"
-import { LocationContext } from "../context/LocationContext.jsx"
+import { useContext, useState } from "react"
+import { LocationContext } from "../../context/LocationContext"
 
 const Header = () => {
-    const {location,error} = useContext(LocationContext)
+    const {location} = useContext(LocationContext);
+    const [state,setState]= useState("");
+    
   return (
     <header className="w-full border-b">
       <div className="flex justify-between items-center px-6 py-3">
@@ -25,8 +27,8 @@ const Header = () => {
 
         <div className="flex items-center gap-4 text-sm">
         <div className="relative">
-        <select className="appearance-none text-sm pl-3 pr-8 py-1.5 border border-gray-300 rounded-md outline-none cursor-pointer hover:border-gray-400 bg-white text-gray-700">
-            <option value="" disabled>{location || "Select City"}</option>
+        <select value={state||location} onChange={(e)=>{setState(e.target.value)}} className="appearance-none text-sm pl-3 pr-8 py-1.5 border border-gray-300 rounded-md outline-none cursor-pointer hover:border-gray-400 bg-white text-gray-700">
+            <option value="" disabled>Select City</option>
             <optgroup label="Maharashtra">
             <option value="mumbai">Mumbai</option>
             <option value="pune">Pune</option>

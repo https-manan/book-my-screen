@@ -1,6 +1,6 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
+const USER_API='http://localhost:8080/app/api/v1/';
 
-const USER_API='http://localhost:8080/api/v1/';
 
 export const appApi = createApi({
     reducerPath:"api",
@@ -11,7 +11,7 @@ export const appApi = createApi({
     endpoints:(build)=>({
         createMovie:build.mutation({
             query:({formData})=>({
-                url:"/movie/createMovie",
+                url:"/movie",
                 method:"POST",
                 body:formData,
             })
@@ -37,7 +37,7 @@ export const appApi = createApi({
         }),
         createTheater:build.mutation({
             query:({formData})=>({
-                url:'/theater/create',
+                url:'/theater',
                 method:"POST",
                 body:formData
             })
@@ -50,7 +50,7 @@ export const appApi = createApi({
         }),
         getTheaterByState:build.query({
             query:({state})=>({
-                url:`/theater?state=${state}`,
+                url:`/theater/theaters?state=${state}`,
                 method:"GET",
             })
         }),
@@ -75,13 +75,14 @@ export const appApi = createApi({
                 body:formData
             })
         }),
-        getMovieByDateAndLocation:build.query({
-            query:()=>({
-                url:"/show/",
-                method:"GET"
+        getShowByMovieAndLocation:build.query({
+            query:({movieId,date,location})=>({
+                url: `/show/movie/${movieId}?date=${date}&location=${location}`,
+                method:"GET",
+                credentials:"include"
             })
         })
-    }),
+    }), 
 })
 
 
@@ -94,7 +95,7 @@ export const {
     useGetAllTheatersQuery,
     useGetTheaterByStateQuery,
     useCreateShowMutation,
-    useGetMovieByDateAndLocationQuery,
+    useGetShowByMovieAndLocationQuery,
     useGetShowByIdQuery,
     useUpdateSeatStatusMutation,
 }=appApi; 

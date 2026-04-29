@@ -4,7 +4,7 @@ import axios from "axios"
 export const LocationContext = createContext()
 
 export const LocationContextProvider = ({ children }) => {
-  const [location, setLocation] = useState("")
+  const [location, setLocation] = useState("Delhi")
   const [error, setError] = useState("")
   useEffect(() => {
     const fetchLocData = async (lat, long) => {
