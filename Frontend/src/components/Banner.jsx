@@ -32,7 +32,7 @@ const Banner = () => {
         {data?.movies.map((b) => (
           <div key={b._id} className="px-2">
             <img
-              src={b.posterUrl.secure_url}
+              src={b.posterUrl.secure_url}//secure_url se hum display krte hai (the secrue url of the cloudinary )
               alt={`banner-${b._id}`}
               className="w-full h-[300px] object-cover rounded-2xl shadow-lg"
             />
