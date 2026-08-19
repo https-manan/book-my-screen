@@ -1,11 +1,12 @@
 import express from 'express';
-import { activateUser, createUser, getAllUsers, getUserById } from './userController';
+import { activateUser, createUser, findUserByEmail, getAllUsers, getUserById } from './userController';
 import { isVerifiedUser } from '../../middleware/authMiddleware';
 const route = express.Router();
 
 route.post('/',createUser);
 route.get('/',getAllUsers); 
-route.get('/me',isVerifiedUser,getUserById); //and this and next one too so add auth middleware later here 
+route.post('/email',findUserByEmail)
+route.get('/me',isVerifiedUser,getUserById); 
 route.post('/activate/:id',isVerifiedUser,activateUser)
 
 

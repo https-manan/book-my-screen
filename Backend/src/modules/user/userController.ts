@@ -28,6 +28,7 @@ export const createUser = async(req:Request,res:Response)=>{
     }
 }
 
+
 export const getAllUsers = async(req:Request,res:Response)=>{
     try {
         const users = await User.find();
@@ -46,6 +47,30 @@ export const getAllUsers = async(req:Request,res:Response)=>{
         })
     }
 }
+
+export const findUserByEmail=async(req:Request,res:Response)=>{
+    try {
+        const {email}= req.body;
+        if(!email){
+            return res.status(401).json({
+                msg:"Please provide email"
+            })
+        }
+        const user = await User.findOne({email});
+        if(!user){
+            return res.status(404).json({
+                msg:'No user found with this email.'
+            })
+        }
+        return res.status(200).json({ user });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            msg:"Error in getUserByEmail endpoint"
+        })
+    }
+}
+
 
 export const getUserById=async(req:Request,res:Response)=>{
     try {

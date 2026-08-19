@@ -4,6 +4,7 @@ import { generateSeatLayout } from "../../utils";
 import { Show } from "./showModel";
 import { showSchema } from "./showValidation";
 
+
 export const createShow = async(req:Request,res:Response)=>{
     try {
         const parsed = showSchema.safeParse(req.body);
@@ -13,9 +14,8 @@ export const createShow = async(req:Request,res:Response)=>{
                 errors:parsed.error
             })
         }
-        const seatLayout = generateSeatLayout();
-        const showToCreate = {...req.body, seatLayout} 
-        await Show.create(showToCreate)
+        const seatLayout = generateSeatLayout(); //defined in index.ts in utils
+        await Show.create({...req.body, seatLayout})
         return res.status(201).json({
             msg:"Show created successfully"
         })
@@ -27,6 +27,8 @@ export const createShow = async(req:Request,res:Response)=>{
     }
 }
 
+
+
 export const getShowByMovieStateLocation = async(req:Request,res:Response)=>{
     try {
         const {movieId} = req.params;
@@ -34,15 +36,17 @@ export const getShowByMovieStateLocation = async(req:Request,res:Response)=>{
         const start = new Date(date as string);
         const end = new Date(date as string);
         end.setDate(end.getDate()+1); // end date ko +1 kra hai startDate ke bss ye h
+        
         const shows = await Show.find({
-          movie: movieId, //Iska matlab shows me Vo movie find kro jis movie ki id is MovieId
+          movie: movieId, 
           location: location as string,
           date: { $gte: start, $lt: end } //$gte is greater than and $lt is less than 
         }).populate("movie theater").sort({ startTime: 1 });
+        
         if(!shows || shows.length === 0) return res.status(404).json({
             msg:"No show available"
         })
-        const groupedShow = groupShowsByTheatreAndMovie(shows);
+        const groupedShow = groupShowsByTheatreAndMovie(shows);//This is also defined in utils->index.ts
         return res.status(200).json({
             groupedShow
         })
@@ -53,6 +57,7 @@ export const getShowByMovieStateLocation = async(req:Request,res:Response)=>{
         })
     }
 }
+
 
 export const getShowById = async(req:Request,res:Response)=>{
     try {
@@ -114,3 +119,5 @@ export const updateSeatStatus = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Something went wrong" });
   }
 };
+
+//To isme ek route or banega which gonna check  ki isSeat available or not and if not then hum FE me x lga denge uss seat ko

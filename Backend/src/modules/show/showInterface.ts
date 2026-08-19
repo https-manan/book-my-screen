@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 export interface IShow{
     _id?:string,
     movie:Types.ObjectId,
-    theater:Types.ObjectId,
+    theater:Types.ObjectId, //Check what is this and all 
     location:string,
     format:"2D"|"3D"|"IMAX"|"PVR PXL";
     audioType?:string;

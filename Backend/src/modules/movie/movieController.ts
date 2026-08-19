@@ -34,6 +34,8 @@ export const createMovie = async (req:Request,res:Response)=>{
     }
 }
 
+
+
 export const getAllMovies=async(_:any,res:Response)=>{
     try {
         const allMovies = await Movie.find();
@@ -53,25 +55,7 @@ export const getAllMovies=async(_:any,res:Response)=>{
     }
 }
 
-export const getMoviesById =async(req:Request,res:Response)=>{
-    try {
-        const {id}= req.params;
-        const movie = await Movie.findById(id);
-        if(!movie){
-            return res.status(404).json({
-                msg:"No movie found"
-            })
-        }
-        return res.status(200).json({
-            movie
-        })
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            msg:"Error in getmoviebyId BE"
-        })
-    }
-}
+
 
 export const getTopRecMovies = async(req:Request,res:Response)=>{
     try {
@@ -88,6 +72,28 @@ export const getTopRecMovies = async(req:Request,res:Response)=>{
         console.log(error)
         return res.status(500).json({
             msg:"Error in recommendMovie BE" 
+        })
+    }
+}
+
+
+
+export const getMoviesById =async(req:Request,res:Response)=>{
+    try {
+        const {id}= req.params;
+        const movie = await Movie.findById(id);
+        if(!movie){
+            return res.status(404).json({
+                msg:"No movie found"
+            })
+        }
+        return res.status(200).json({
+            movie
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            msg:"Error in getmoviebyId BE"
         })
     }
 }

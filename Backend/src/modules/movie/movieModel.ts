@@ -31,11 +31,11 @@ const movieSchema = new mongoose.Schema<IMovie>({
     required: true
   },
   posterUrl:{
-    public_id: {
+    public_id: {    //Public_id is for updation and all 
       type: String,
       required: true
     },
-    secure_url: {
+    secure_url: {  //Secure URL is only to display that image
       type: String
     }
   },

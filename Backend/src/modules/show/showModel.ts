@@ -19,6 +19,7 @@ const showSchema = new mongoose.Schema<IShow>({
   format: {
     type: String,
     enum: ["2D", "3D", "IMAX", "PVR PXL"],
+    default:'2D',
     required: true
   },
   audioType: {
@@ -28,7 +29,7 @@ const showSchema = new mongoose.Schema<IShow>({
   startTime: {
     type: Date,
     required: true
-  },
+  },  
   date: {
     type: Date,
     required: true

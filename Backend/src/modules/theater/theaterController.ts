@@ -14,7 +14,7 @@ export const createTheater = async (req: Request, res: Response) => {
       });
     }
     if (!req.file) {
-      return res.status(400).json({ msg: "Logo image is required" });
+      return res.status(400).json({ msg: "Logo image for theater is required" });
     }
     const logo = req.file?.path;
     const result = await uploadImage(logo);

@@ -14,7 +14,7 @@ export const uploadImage = async (imagePath:any) => {
 
 export const deleteMediaFromCloudinary = async (publicId:any) => {
   try {
-    const result = await cloudinary.uploader.destroy(publicId, {
+    const result = await cloudinary.uploader.destroy(publicId,{
       resource_type: "image",
     });
     return result;

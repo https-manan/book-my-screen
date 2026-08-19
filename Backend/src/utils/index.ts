@@ -74,12 +74,6 @@ export const generateSeatLayout = () => {
 
 // Grouping function
 
-//This is done bcz movie and theater reapeats based on time so we need to grp them 
-
-// { movie: Avengers, theater: PVR, show: 10AM },
-// { movie: Avengers, theater: PVR, show: 1PM },
-// { movie: Avengers, theater: INOX, show: 4PM },
-// { movie: Batman, theater: PVR, show: 6PM }
 
 export const groupShowsByTheatreAndMovie = (shows: IShow[]): GroupedShow[] => {
   const grouped: Record<string, GroupedShow> = {};
@@ -107,3 +101,87 @@ export const groupShowsByTheatreAndMovie = (shows: IShow[]): GroupedShow[] => {
 
   return Object.values(grouped);
 };
+
+
+//eg:-
+
+//suppose we have 3 shows like this:-
+// {
+//   _id: "show101",
+//   movie: {
+//     _id: "movie1",
+//     title: "Avengers"
+//   },
+//   theater: {
+//     _id: "theater1",
+//     name: "PVR Saket"
+//   },
+//   date: "2026-08-18",
+//   startTime: "10:00",
+//   format: "2D",
+//   audioType: "Hindi"
+// }
+
+// {
+//   _id: "show102",
+//   movie: {
+//     _id: "movie1",
+//     title: "Avengers"
+//   },
+//   theater: {
+//     _id: "theater1",
+//     name: "PVR Saket"
+//   },
+//   date: "2026-08-18",
+//   startTime: "14:00",
+//   format: "2D",
+//   audioType: "Hindi"
+// }
+
+
+// {
+//   _id: "show103",
+//   movie: {
+//     _id: "movie1",
+//     title: "Avengers"
+//   },
+//   theater: {
+//     _id: "theater2",
+//     name: "INOX Nehru Place"
+//   },
+//   date: "2026-08-18",
+//   startTime: "18:00",
+//   format: "3D",
+//   audioType: "English"
+// }
+
+// Avengers
+//  ├── PVR Saket
+//  │    ├── 10:00
+//  │    └── 14:00
+//  │
+//  └── INOX Nehru Place
+//       └── 18:00
+
+
+
+
+// So grouped have to store like this 
+
+// {
+//   "movie1_theater1": {
+//     movie: ...,
+//     theater: {
+//       theaterDetails: ...,
+//       shows: [...]
+//     }
+//   },
+
+//   "movie1_theater2": {
+//     movie: ...,
+//     theater: {
+//       theaterDetails: ...,
+//       shows: [...]
+//     }
+//   }
+// }

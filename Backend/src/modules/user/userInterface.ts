@@ -1,8 +1,8 @@
 export interface IUser{
     _id?:string,
+    name:string,
     email:string,
     phone:number,
-    name:string,
     role:'Admin'|'User',
     activateUser?:boolean;
     createdAt:Date;
