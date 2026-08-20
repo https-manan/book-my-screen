@@ -1,21 +1,42 @@
 import React from "react"
 import { filters, languages } from "../utils/constants"
 
-const Filters = () => {
+const GENRES = ["Action", "Drama", "Comedy", "Horror"]
+
+const Filters = ({
+  selectedLanguages,
+  selectedGenres,
+  selectedFormats,
+  onToggleLanguage,
+  onToggleGenre,
+  onToggleFormat,
+  onClearLanguages,
+  onClearGenres,
+  onClearFormats,
+}) => {
   return (
     <div className="w-full bg-white p-4 rounded-xl shadow-md h-fit">
       <h2 className="font-bold text-lg mb-4">Filters</h2>
       <div className="mb-6">
         <div className="flex justify-between mb-2">
           <h3 className="font-semibold">Languages</h3>
-          <span className="text-red-500 text-sm cursor-pointer hover:underline">Clear</span>
+          <span
+            onClick={onClearLanguages}
+            className="text-red-500 text-sm cursor-pointer hover:underline">
+            Clear
+          </span>
         </div>
 
         <div className="flex flex-wrap gap-2">
           {languages.map((lang, i) => (
             <span
               key={i}
-              className="px-3 py-1 text-sm border rounded-full cursor-pointer hover:bg-red-500 hover:text-white transition">
+              onClick={() => onToggleLanguage(lang)}
+              className={`px-3 py-1 text-sm border rounded-full cursor-pointer transition ${
+                selectedLanguages.includes(lang)
+                  ? "bg-red-500 text-white border-red-500"
+                  : "hover:bg-red-500 hover:text-white"
+              }`}>
               {lang}
             </span>
           ))}
@@ -24,14 +45,23 @@ const Filters = () => {
       <div className="mb-6">
         <div className="flex justify-between mb-2">
           <h3 className="font-semibold">Genres</h3>
-          <span className="text-red-500 text-sm cursor-pointer hover:underline">Clear</span>
+          <span
+            onClick={onClearGenres}
+            className="text-red-500 text-sm cursor-pointer hover:underline">
+            Clear
+          </span>
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {["Action", "Drama", "Comedy", "Horror"].map((g, i) => (
+          {GENRES.map((g, i) => (
             <span
               key={i}
-              className="px-3 py-1 text-sm border rounded-full cursor-pointer hover:bg-red-500 hover:text-white transition">
+              onClick={() => onToggleGenre(g)}
+              className={`px-3 py-1 text-sm border rounded-full cursor-pointer transition ${
+                selectedGenres.includes(g)
+                  ? "bg-red-500 text-white border-red-500"
+                  : "hover:bg-red-500 hover:text-white"
+              }`}>
               {g}
             </span>
           ))}
@@ -40,14 +70,23 @@ const Filters = () => {
       <div>
         <div className="flex justify-between mb-2">
           <h3 className="font-semibold">Format</h3>
-          <span className="text-red-500 text-sm cursor-pointer hover:underline">Clear</span>
+          <span
+            onClick={onClearFormats}
+            className="text-red-500 text-sm cursor-pointer hover:underline">
+            Clear
+          </span>
         </div>
 
         <div className="flex flex-wrap gap-2">
           {filters.map((f, i) => (
             <span
               key={i}
-              className="px-3 py-1 text-sm border rounded-full cursor-pointer hover:bg-red-500 hover:text-white transition">
+              onClick={() => onToggleFormat(f)}
+              className={`px-3 py-1 text-sm border rounded-full cursor-pointer transition ${
+                selectedFormats.includes(f)
+                  ? "bg-red-500 text-white border-red-500"
+                  : "hover:bg-red-500 hover:text-white"
+              }`}>
               {f}
             </span>
           ))}

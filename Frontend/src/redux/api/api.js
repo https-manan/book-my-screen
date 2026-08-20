@@ -1,13 +1,11 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
+
 const USER_API='http://localhost:8080/app/api/v1/';
 
 
 export const appApi = createApi({
     reducerPath:"api",
-    baseQuery:fetchBaseQuery({
-        baseUrl:USER_API,
-        credentials:"include"
-    }),
+    baseQuery:fetchBaseQuery({baseUrl:USER_API,credentials:"include"}),
     endpoints:(build)=>({
         createMovie:build.mutation({
             query:({formData})=>({
@@ -81,6 +79,52 @@ export const appApi = createApi({
                 method:"GET",
                 credentials:"include"
             })
+        }),
+        getOtpByEmail:build.mutation({
+            query:({email})=>({
+                url:'/auth/send-otp',
+                method:"POST",
+                body:{email},
+                credentials:"include"
+            })
+        }),
+        verifyEmail:build.mutation({
+            query:({hash,otp,email})=>({
+                url:'/auth/verify-otp',
+                method:"POST",
+                body:{hash,otp,email},
+                credentials:"include"
+            })
+        }),
+        activateUser:build.mutation({
+            query:({id,userStatus})=>({
+                url:`/user/activate/${id}`,
+                method:"POST",
+                body:{userStatus},
+                credentials:'include'
+            })
+        }),
+        logout:build.query({
+            query:({})=>({
+                url:"/auth/logout",
+                method:'POST'
+            })
+        }),
+        createUser:build.mutation({
+            query:({name,email,phone})=>({
+                url:'/user',
+                method:"POST",
+                body:{name,email,phone},
+                credentials:'include'
+            })
+        }),
+        findUserByEmail:build.mutation({
+            query:({email})=>({
+                url:'/user/email',
+                method:"POST",
+                body:{email},
+                credentials:'include'
+            })
         })
     }), 
 })
@@ -98,4 +142,10 @@ export const {
     useGetShowByMovieAndLocationQuery,
     useGetShowByIdQuery,
     useUpdateSeatStatusMutation,
+    useGetOtpByEmailMutation,
+    useLogoutQuery,
+    useActivateUserMutation,
+    useVerifyEmailMutation,
+    useCreateUserMutation,
+    useFindUserByEmailMutation
 }=appApi; 

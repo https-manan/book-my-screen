@@ -79,46 +79,46 @@ export const movies = [
     votes: "15.2K",
     img: m5,
   },
-  {
-    id: 6,
-    title: "M3GAN 2.0",
-    genre: "Horror/Sci-Fi/Thriller",
-    rating: 8.4,
-    votes: "117",
-    img: m6
-  },
-  {
-    "id": 7,
-    "title": "Housefull 5",
-    "genre": "Comedy/Thriller",
-    "rating": 6.1,
-    "votes": "56.3K",
-    "img": m7
-  },
-  {
-    "id": 8,
-    "title": "Sitaare Zameen Par",
-    "genre": "Comedy/Drama/Sports",
-    "rating": 8.5,
-    "votes": "39.6K",
-    "img": m8
-  },
-  {
-    "id": 9,
-    "title": "Naruto the Movie: Ninja Clash in the Land of Snow",
-    "genre": "Action/Adventure/Animation/Comedy",
-    "rating": 9.6,
-    "votes": "51",
-    "img": m9
-  },
-  {
-    "id": 10,
-    "title": "28 Years Later",
-    "genre": "Horror/Thriller",
-    "rating": 7.9,
-    "votes": "3.7K",
-    "img": m10
-  }
+  //  {
+  //     "id": 6,
+  //     "title": "M3GAN 2.0",
+  //     "genre": "Horror/Sci-Fi/Thriller",
+  //     "rating": 8.4,
+  //     "votes": "117",
+  //     "img": m6
+  //   },
+  //   {
+  //     "id": 7,
+  //     "title": "Housefull 5",
+  //     "genre": "Comedy/Thriller",
+  //     "rating": 6.1,
+  //     "votes": "56.3K",
+  //     "img": m7
+  //   },
+  //   {
+  //     "id": 8,
+  //     "title": "Sitaare Zameen Par",
+  //     "genre": "Comedy/Drama/Sports",
+  //     "rating": 8.5,
+  //     "votes": "39.6K",
+  //     "img": m8
+  //   },
+  //   {
+  //     "id": 9,
+  //     "title": "Naruto the Movie: Ninja Clash in the Land of Snow",
+  //     "genre": "Action/Adventure/Animation/Comedy",
+  //     "rating": 9.6,
+  //     "votes": "51",
+  //     "img": m9
+  //   },
+  //   {
+  //     "id": 10,
+  //     "title": "28 Years Later",
+  //     "genre": "Horror/Thriller",
+  //     "rating": 7.9,
+  //     "votes": "3.7K",
+  //     "img": m10
+  //   }
 ];
 
 export const allMovies = [
@@ -188,7 +188,7 @@ export const allMovies = [
     id: 7,
     title: "Housefull 5",
     genre: "Comedy/Thriller",
-    rating: 5.1,
+    rating: 6.1,
     votes: "56.3K",
     img: m7,
     languages: "Hindi",
@@ -266,7 +266,7 @@ export const theatres = [
       { time: "6:45 PM", label: "RECLINERS", highlight: true },
       { time: "11:35 PM", label: "RECLINERS" },
       { time: "7:45 PM", label: "RECLINERS" },
-      { time: "12:35 PM", label: "ECLINERS" }
+      { time: "12:35 PM", label: "RECLINERS" }
     ],
   },
   {
@@ -352,26 +352,26 @@ export const filters = ["2D", "3D", "Wheelchair Friendly", "Premium Seats", "Rec
 
 export const tabs = ["Profile", "Your Orders"];
 
-// export const countryCodes = [
-//   { name: "India", code: "IN", dial_code: "+91" },
-//   { name: "United States", code: "US", dial_code: "+1" },
-//   { name: "United Kingdom", code: "GB", dial_code: "+44" },
-//   { name: "Australia", code: "AU", dial_code: "+61" },
-//   { name: "Canada", code: "CA", dial_code: "+1" },
-//   { name: "Germany", code: "DE", dial_code: "+49" },
-//   { name: "France", code: "FR", dial_code: "+33" },
-//   { name: "Japan", code: "JP", dial_code: "+81" },
-//   { name: "China", code: "CN", dial_code: "+86" },
-//   { name: "Brazil", code: "BR", dial_code: "+55" },
-//   { name: "United Arab Emirates", code: "AE", dial_code: "+971" },
-//   { name: "Bangladesh", code: "BD", dial_code: "+880" },
-//   { name: "Nepal", code: "NP", dial_code: "+977" },
-//   { name: "Pakistan", code: "PK", dial_code: "+92" },
-//   { name: "Russia", code: "RU", dial_code: "+7" },
-//   { name: "South Africa", code: "ZA", dial_code: "+27" },
-//   { name: "Sri Lanka", code: "LK", dial_code: "+94" },
-//   { name: "Thailand", code: "TH", dial_code: "+66" },
-//   { name: "Indonesia", code: "ID", dial_code: "+62" },
-//   { name: "Malaysia", code: "MY", dial_code: "+60" },
-//   // Add more if needed
-// ];
+export const countryCodes = [
+  { name: "India", code: "IN", dial_code: "+91" },
+  { name: "United States", code: "US", dial_code: "+1" },
+  { name: "United Kingdom", code: "GB", dial_code: "+44" },
+  { name: "Australia", code: "AU", dial_code: "+61" },
+  { name: "Canada", code: "CA", dial_code: "+1" },
+  { name: "Germany", code: "DE", dial_code: "+49" },
+  { name: "France", code: "FR", dial_code: "+33" },
+  { name: "Japan", code: "JP", dial_code: "+81" },
+  { name: "China", code: "CN", dial_code: "+86" },
+  { name: "Brazil", code: "BR", dial_code: "+55" },
+  { name: "United Arab Emirates", code: "AE", dial_code: "+971" },
+  { name: "Bangladesh", code: "BD", dial_code: "+880" },
+  { name: "Nepal", code: "NP", dial_code: "+977" },
+  { name: "Pakistan", code: "PK", dial_code: "+92" },
+  { name: "Russia", code: "RU", dial_code: "+7" },
+  { name: "South Africa", code: "ZA", dial_code: "+27" },
+  { name: "Sri Lanka", code: "LK", dial_code: "+94" },
+  { name: "Thailand", code: "TH", dial_code: "+66" },
+  { name: "Indonesia", code: "ID", dial_code: "+62" },
+  { name: "Malaysia", code: "MY", dial_code: "+60" },
+  // Add more if needed
+];

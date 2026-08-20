@@ -10,8 +10,13 @@ const getDates = (numDays = 7) => {
   return Array.from({ length: numDays }, (_, i) => {
     const d = new Date();
     d.setDate(today.getDate() + i);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
     return {
-      full: d.toISOString().split("T")[0],
+      // built from LOCAL y/m/d — not toISOString(), which shifts to UTC and can
+      // roll "today" back to yesterday's date for timezones ahead of UTC (e.g. IST)
+      full: `${yyyy}-${mm}-${dd}`,
       date: d.getDate(),
       day: d.toLocaleString("en-US", { weekday: "short" }),
       month: d.toLocaleString("en-US", { month: "short" }),
@@ -24,22 +29,43 @@ const MovieDetails = () => {
   const navigate = useNavigate();
   const { id, state, movieName } = useParams();
   const [selectedDate, setSelectedDate] = useState(dates[0].full);
+  const [selectedFormats, setSelectedFormats] = useState([]);
 
   const { data, isLoading, error } = useGetMovieByIdQuery({ id }, { skip: !id });
   const { data: showData, isLoading: showLoading } = useGetShowByMovieAndLocationQuery(
     { movieId: id, date: selectedDate, location: state },
-    { skip: !id || !state || !selectedDate }
+    { skip: !id || !state || !selectedDate }     //This skip is for like agar koi bhi field is missing dont send API req
   );
 
   useEffect(() => {
     if (error) toast.error("Error in getting movie details")
   }, [error])
 
+  const toggleFormat = (f) => {
+    setSelectedFormats((prev) =>
+      prev.includes(f) ? prev.filter((v) => v !== f) : [...prev, f]
+    );
+  };
+
   if (isLoading) return (
     <div className="flex justify-center mt-20">
       <Loader2 className="animate-spin" size={36} />
     </div>
   )
+
+  // apply the format filter to each theater's shows, drop theaters left with none
+  const filteredGroups = showData?.groupedShow
+    ?.map((group) => ({
+      ...group,
+      theater: {
+        ...group.theater,
+        shows:
+          selectedFormats.length === 0
+            ? group.theater.shows
+            : group.theater.shows.filter((s) => selectedFormats.includes(s.format)),
+      },
+    }))
+    .filter((group) => group.theater.shows.length > 0);
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -60,9 +86,6 @@ const MovieDetails = () => {
                   ⭐ {data?.movie?.rating}
                 </span>
                 <span className="text-gray-300">{data?.movie?.votes} Votes</span>
-                <button className="bg-white text-black px-4 mx-9 py-1 rounded-md hover:bg-gray-300 transition cursor-pointer">
-                  Rate now
-                </button>
               </div>
               <div className="mt-4 flex gap-2 flex-wrap">
                 <span className="bg-gray-800 px-3 py-1 rounded">
@@ -85,9 +108,15 @@ const MovieDetails = () => {
 
       <div className="max-w-4xl mx-auto mt-6 pb-10">
         <div className="flex gap-2 flex-wrap">
-            {/*we need to work on filters and filter on basis of filters by using state and all  */}
           {filters.map((f, i) => (
-            <div key={i} className="px-3 py-1 bg-white rounded-full text-sm shadow hover:bg-gray-200 cursor-pointer transition">
+            <div
+              key={i}
+              onClick={() => toggleFormat(f)}
+              className={`px-3 py-1 rounded-full text-sm shadow cursor-pointer transition ${
+                selectedFormats.includes(f)
+                  ? "bg-red-500 text-white"
+                  : "bg-white hover:bg-gray-200"
+              }`}>
               {f}
             </div>
           ))}
@@ -114,10 +143,10 @@ const MovieDetails = () => {
             <div className="flex justify-center mt-6">
               <Loader2 className="animate-spin" />
             </div>
-          ) : showData?.groupedShow?.length === 0 ? (
+          ) : !filteredGroups || filteredGroups.length === 0 ? (
             <p className="text-center text-gray-500 mt-6">No shows available for this date.</p>
           ) : (
-            showData?.groupedShow?.map((group, i) => (
+            filteredGroups.map((group, i) => (
               <div key={i} className="border p-4 rounded-xl bg-white flex gap-4 shadow-sm hover:shadow-md transition">
                 <img
                   src={group?.theater?.theaterDetails?.logo?.secure_url}

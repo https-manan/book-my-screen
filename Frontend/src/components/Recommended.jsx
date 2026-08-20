@@ -56,3 +56,6 @@ const Recommended = () => {
 }
 
 export default Recommended
+
+
+{/* To yahi pr ek kaam kario that when search bar mai ek bhi shabd enter hoga we gonna remove the banner and start giving movies with that name only  */}

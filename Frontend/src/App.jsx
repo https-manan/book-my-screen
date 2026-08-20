@@ -6,8 +6,11 @@ import MainLayout from './components/common/MainLayout'
 import Home from './components/Home'
 import MovieDetails from './components/MovieDetails'
 import BookingHistory from './components/BookingHistory'
-import SeatLayout from './components/SeatLayout'
+import SeatLayout from './components/seatLayout'
 import CheckOutpage from './components/CheckOutpage'
+import Authlogin from './components/common/authlogin'
+import { Toaster } from 'sonner'
+
 
 
 const appRouter=createBrowserRouter([
@@ -21,7 +24,7 @@ const appRouter=createBrowserRouter([
       },
       {
         path:'profile/:id',
-        element:<Profile/>
+        element:<Profile/>  
       },
       {
         path:'movies',
@@ -41,6 +44,10 @@ const appRouter=createBrowserRouter([
       },{
         path:'show/:showId/:state/checkout',
         element:<CheckOutpage/>
+      },
+      {
+        path:"authLogin",//Here for the email and OTP thing 
+        element:<Authlogin/>,
       }
     ]
   }
@@ -49,7 +56,10 @@ const appRouter=createBrowserRouter([
 
 function App() {
   return (
-    <RouterProvider router={appRouter}></RouterProvider>
+    <div>
+      <Toaster/>
+      <RouterProvider router={appRouter}></RouterProvider>  {/*This appRoute we have defined above by approute=createBrowserRouter()*/}
+    </div>
   )
 }
 
