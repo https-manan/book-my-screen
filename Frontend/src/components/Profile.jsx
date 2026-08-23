@@ -9,7 +9,7 @@ import { logout } from '../redux/api/auth';
 const Profile = () => {
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState("profile");
-  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const { isAuthenticated, user } = useSelector((state) => state.auth)
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">

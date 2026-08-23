@@ -6,6 +6,11 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/api/auth";
 import { useNavigate } from "react-router-dom";
 
+
+
+//Ismai ek kaam krnai hai that in headers after login jb humere icon pr click ho then redirect to profile page and also that sandwich button remove that logout ka option aana chiya in profile.jsx
+
+
 const AuthLogin = () => {
   const [step, setStep] = useState("email");
   const [email, setEmail] = useState("");
@@ -90,6 +95,7 @@ const AuthLogin = () => {
           user: verifyData.user,
         })
       );
+      navigate('/');
     }
     if (verifyError) {
       toast.error("Failed to verify OTP");

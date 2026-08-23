@@ -19,7 +19,6 @@ const Header = () => {
     const handleSearchChange = (e) => {
         const value = e.target.value
         setSearchTerm(value)
-        // if you start typing from another page, jump home so results are visible
         if (value && routerLocation.pathname !== "/") {
             navigate("/")
         }
@@ -76,9 +75,6 @@ const Header = () => {
                             </span>
                         </button>
                     )}
-                    <div className="cursor-pointer text-gray-500 hover:text-gray-800 text-lg px-1">
-                        ☰
-                    </div>
                 </div>
             </div>
         </header>

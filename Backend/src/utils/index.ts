@@ -3,24 +3,26 @@ import { IMovie } from "../modules/movie/movieInterface";
 import { IShow } from "../modules/show/showInterface";
 import { ITheater } from "../modules/theater/theaterInterface";
 
-type GroupedShow = {
-  movie: Types.ObjectId | IMovie;
-  theater: {
-    theaterDetails: Types.ObjectId | ITheater;
-    shows: Array<{
-      _id: string;
-      date: Date;
-      startTime: Date;
-      format: string;
-      audioType: string;
-    }>;
+  type GroupedShow = {
+    movie: Types.ObjectId | IMovie;     //This is for like for a movie kun kun se theater mai hai vo and time in that theater 
+    theater: {
+      theaterDetails: Types.ObjectId | ITheater;
+      shows: Array<{
+        _id: string;
+        date: Date;
+        startTime: Date;
+        format: string;
+        audioType: string;
+      }>;
+    };
   };
-};
+
 
 export const isValidEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };
+
 
 export const generateSeatLayout = () => {
   return [

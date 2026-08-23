@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import { IUser } from "./userInterface";
-import { boolean } from "zod";
 
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -10,7 +9,7 @@ const userSchema = new mongoose.Schema<IUser>({
     },
     email:{
         type:String,
-        rqeuired:true,
+        required:true, 
         unique:true,
     },
     role:{
@@ -24,7 +23,7 @@ const userSchema = new mongoose.Schema<IUser>({
         unique:true,
     },
     activateUser:{
-        type:boolean,
+        type:Boolean,
         default:false
     }
 },{timestamps:true}) 

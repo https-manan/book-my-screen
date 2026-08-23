@@ -1,16 +1,18 @@
-import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { useGetShowByIdQuery } from "../redux/api/api";
+import { useSeatContext } from "../context/SeatContext";
+import { useSelector } from "react-redux";
 
 const SeatLayout = () => {
   const { showId } = useParams();
   const { data, isLoading, error } = useGetShowByIdQuery({ id: showId });
   const navigate = useNavigate();
-  // was: useSeatContext() — that hook was never imported/defined, so this
-  // page crashed on render. Replaced with plain local state.
-  const [selectedSeats, setSelectedSeats] = useState([]);
-
+  // was: const [selectedSeats, setSelectedSeats] = useSeatContext([]);
+  // useSeatContext() returns an object ({selectedSeats, setSelectedSeats}),
+  // not an array — array-destructuring an object throws "not iterable".
+  const { selectedSeats, setSelectedSeats } = useSeatContext();
+  const { isAuthenticated, user } = useSelector((state) => state.auth)
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error loading show</p>;
 
@@ -73,7 +75,25 @@ const SeatLayout = () => {
           </p>
         </div>
         <div className="bg-[#f84464] cursor-pointer text-white px-4 py-1.5 rounded text-sm">
-          <button>SignIn</button>
+          {!isAuthenticated && (
+                        <button
+                            onClick={() => navigate('/authLogin')}
+                            className="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-md text-sm font-medium">
+                            Sign In
+                        </button>
+                    )}
+                    {isAuthenticated && (
+                        <button
+                            onClick={() => navigate(`/profile/${user._id}`)}
+                            className="flex items-center gap-2 px-3 py-1.5 rounded-md hover:bg-gray-100 transition">
+                            <div className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center text-sm">
+                                👤
+                            </div>
+                            <span className="text-sm font-medium text-gray-800">
+                                {user?.name}
+                            </span>
+                        </button>
+                    )}
         </div>
       </div>
 

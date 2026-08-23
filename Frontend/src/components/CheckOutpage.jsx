@@ -1,33 +1,108 @@
-import React from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { useGetShowByIdQuery } from '../redux/api/api'
+import { useSeatContext } from '../context/SeatContext'
+import { Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
 
 const CheckOutpage = () => {
+  const { showId, state } = useParams()
+  const navigate = useNavigate()
+  const { selectedSeats } = useSeatContext()
+  const { user } = useSelector((s) => s.auth)
+
+  const { data, isLoading, error } = useGetShowByIdQuery({ id: showId }, { skip: !showId })
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <Loader2 className="animate-spin" size={36} />
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex flex-col justify-center items-center gap-4">
+        <p className="text-gray-500">Couldn't load your booking. Please go back and try again.</p>
+        <button onClick={() => navigate(-1)} className="bg-black text-white px-6 py-2 rounded-md">
+          Go back
+        </button>
+      </div>
+    )
+  }
+
+  // if someone lands here directly without picking seats (refresh, back button, etc.)
+  if (!selectedSeats || selectedSeats.length === 0) {
+    return (
+      <div className="min-h-screen flex flex-col justify-center items-center gap-4">
+        <p className="text-gray-500">No seats selected.</p>
+        <button onClick={() => navigate(-1)} className="bg-black text-white px-6 py-2 rounded-md">
+          Go back and select seats
+        </button>
+      </div>
+    )
+  }
+
+  const show = data?.show
+
+  const orderAmount = selectedSeats.reduce((sum, s) => sum + s.price, 0)
+  const taxesAndFees = orderAmount * 0.18 // 18% GST on the ticket amount
+  const totalPayable = orderAmount + taxesAndFees
+
+  // group selected seats by type, e.g. { PREMIUM: ["E4","E5"], NORMAL: ["A1"] }
+  const seatsByType = selectedSeats.reduce((acc, s) => {
+    if (!acc[s.type]) acc[s.type] = []
+    acc[s.type].push(`${s.row}${s.number}`)
+    return acc
+  }, {})
+
+  const showDateTime = show?.startTime
+    ? `${new Date(show.startTime).toLocaleDateString("en-US", { day: "2-digit", month: "short" })} • ${new Date(show.startTime).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`
+    : ""
+
+  const handleProceedToPay = () => {
+    // no payment gateway wired up on the backend yet
+    toast("Payment integration coming soon")
+  }
+
   return (
     <div className="min-h-screen bg-gray-100">
 
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 bg-white shadow">
-        <div className="font-bold text-lg">Logo</div>
-
+        <div className="font-bold text-lg cursor-pointer" onClick={() => navigate("/")}>Logo</div>
         <h1 className="font-semibold text-lg">Review your booking</h1>
-
-        <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
+        <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-sm font-medium text-gray-700">
+          {user?.name?.charAt(0)?.toUpperCase()}
+        </div>
       </div>
 
       {/* Main */}
-      <div className="grid grid-cols-3 gap-6 p-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
 
         {/* LEFT SECTION */}
-        <div className="col-span-2 space-y-6">
+        <div className="md:col-span-2 space-y-6">
 
           {/* Movie Card */}
           <div className="flex gap-4 bg-white p-4 rounded-lg shadow">
-            <div className="w-16 h-20 bg-gray-300 rounded"></div>
+            {show?.movie?.posterUrl?.secure_url ? (
+              <img
+                src={show.movie.posterUrl.secure_url}
+                alt={show.movie.title}
+                className="w-16 h-20 object-cover rounded"
+              />
+            ) : (
+              <div className="w-16 h-20 bg-gray-300 rounded"></div>
+            )}
 
             <div>
-              <h2 className="font-semibold">Maa</h2>
-              <p className="text-sm text-gray-500">UA16+ • Hindi • 2D</p>
+              <h2 className="font-semibold">{show?.movie?.title}</h2>
               <p className="text-sm text-gray-500">
-                Cinepolis Acropolis Mall, Kolkata
+                {show?.movie?.certification} • {show?.movie?.languages?.join(", ")} • {show?.format}
+              </p>
+              <p className="text-sm text-gray-500">
+                {show?.theater?.name}{show?.theater?.location ? `, ${show.theater.location}` : ""}
               </p>
             </div>
           </div>
@@ -36,13 +111,19 @@ const CheckOutpage = () => {
           <div className="bg-white p-4 rounded-lg shadow space-y-4">
 
             <div className="flex justify-between text-sm">
-              <p>Today, 30 Jun • 09:00 AM</p>
-              <p className="font-medium">₹99</p>
+              <p>{showDateTime}</p>
+              <p className="font-medium">₹{orderAmount.toFixed(2)}</p>
             </div>
 
             <div>
-              <p className="text-sm font-medium">1 ticket</p>
-              <p className="text-xs text-gray-500">PREMIUM - K4</p>
+              <p className="text-sm font-medium">
+                {selectedSeats.length} ticket{selectedSeats.length !== 1 ? "s" : ""}
+              </p>
+              {Object.entries(seatsByType).map(([type, seats]) => (
+                <p key={type} className="text-xs text-gray-500">
+                  {type} - {seats.join(", ")}
+                </p>
+              ))}
             </div>
 
             <div className="bg-yellow-100 text-yellow-700 text-sm p-3 rounded">
@@ -67,19 +148,19 @@ const CheckOutpage = () => {
 
             <div className="flex justify-between text-sm">
               <p>Order amount</p>
-              <p>₹99</p>
+              <p>₹{orderAmount.toFixed(2)}</p>
             </div>
 
             <div className="flex justify-between text-sm">
               <p>Taxes & fees</p>
-              <p>₹22.42</p>
+              <p>₹{taxesAndFees.toFixed(2)}</p>
             </div>
 
             <hr />
 
             <div className="flex justify-between font-medium">
               <p>To be paid</p>
-              <p>₹121.42</p>
+              <p>₹{totalPayable.toFixed(2)}</p>
             </div>
           </div>
 
@@ -87,10 +168,10 @@ const CheckOutpage = () => {
           <div className="bg-white p-4 rounded-lg shadow space-y-2">
             <h3 className="font-medium">Your details</h3>
 
-            <p className="text-sm font-medium">Amrit</p>
-            <p className="text-sm text-gray-500">+91-9122040963</p>
-            <p className="text-sm text-gray-500">amritmaurya2014@gmail.com</p>
-            <p className="text-sm text-gray-500">West Bengal</p>
+            <p className="text-sm font-medium">{user?.name}</p>
+            <p className="text-sm text-gray-500">{user?.phone ? `+91-${user.phone}` : ""}</p>
+            <p className="text-sm text-gray-500">{user?.email}</p>
+            <p className="text-sm text-gray-500">{state}</p>
           </div>
 
           {/* Terms */}
@@ -99,8 +180,10 @@ const CheckOutpage = () => {
           </div>
 
           {/* Pay Button */}
-          <button className="w-full bg-black text-white py-3 rounded-full font-medium">
-            ₹121.42 TOTAL • Proceed To Pay
+          <button
+            onClick={handleProceedToPay}
+            className="w-full bg-black text-white py-3 rounded-full font-medium">
+            ₹{totalPayable.toFixed(2)} TOTAL • Proceed To Pay
           </button>
 
         </div>

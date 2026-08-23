@@ -347,7 +347,6 @@ const seed = async () => {
   try {
     await mongoose.connect(process.env.DB_URL!);
     console.log("Connected to DB");
-
     await Movie.deleteMany();
     console.log("Cleared existing movies");
 

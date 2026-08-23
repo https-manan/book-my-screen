@@ -74,7 +74,7 @@ export const findUserByEmail=async(req:Request,res:Response)=>{
 
 export const getUserById=async(req:Request,res:Response)=>{
     try {
-        const {id} = req.user?._id;
+        const id = req.user?._id;
         const user =await User.findById(id);
         if(!user)return res.status(404).json({
             msg:"User not found"
@@ -92,8 +92,12 @@ export const getUserById=async(req:Request,res:Response)=>{
 
 export const activateUser = async(req:Request,res:Response)=>{
     try {
-        const {id} = req.user?._id;
-        const userStatus = req.body;
+        const id = req.user?._id;
+        // was `const userStatus = req.body;` — assigned the WHOLE request
+        // body instead of the `userStatus` field your FE actually sends
+        // (api.js sends body:{userStatus}), so `activateUser` was being set
+        // to an object instead of the boolean the schema expects.
+        const { userStatus } = req.body;
         const user=await User.findById(id);
         if(!user)return res.status(400).json({msg:"User not found"});
         await User.findByIdAndUpdate(id,{activateUser:userStatus},{new:true})

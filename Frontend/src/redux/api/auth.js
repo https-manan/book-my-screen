@@ -23,4 +23,17 @@ export const authSlice = createSlice({
 });
 
 export const { setUser, logout } = authSlice.actions;
-export default authSlice.reducer;
+export default authSlice.reducer; 
+
+
+
+
+// we wanna build something like this 
+// {
+//     isAuthenticated: true,
+//     user: {
+//         _id: "123",
+//         name: "Aman",
+//         email: "aman@gmail.com"
+//     }
+// }

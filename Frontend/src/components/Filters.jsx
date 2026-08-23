@@ -1,19 +1,8 @@
-import React from "react"
 import { filters, languages } from "../utils/constants"
 
 const GENRES = ["Action", "Drama", "Comedy", "Horror"]
 
-const Filters = ({
-  selectedLanguages,
-  selectedGenres,
-  selectedFormats,
-  onToggleLanguage,
-  onToggleGenre,
-  onToggleFormat,
-  onClearLanguages,
-  onClearGenres,
-  onClearFormats,
-}) => {
+const Filters = ({selectedLanguages, selectedGenres, selectedFormats, onToggleLanguage,onToggleGenre,onToggleFormat,onClearLanguages,onClearGenres,onClearFormats,}) => {
   return (
     <div className="w-full bg-white p-4 rounded-xl shadow-md h-fit">
       <h2 className="font-bold text-lg mb-4">Filters</h2>
