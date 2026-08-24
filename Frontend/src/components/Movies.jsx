@@ -1,25 +1,17 @@
 import { useNavigate } from "react-router-dom"
 import Banner from "./Banner"
 import Filters from "./Filters"
-import { useContext, useEffect, useMemo, useState } from "react"
+import { useContext, useEffect, useMemo } from "react"
 import { useGetAllMoviesQuery } from "../redux/api/api"
 import { toast } from "sonner"
 import { Loader2 } from "lucide-react"
 import { LocationContext } from "../context/LocationContext"
-
-const toggleInArray = (setter) => (value) => {
-  setter((prev) =>
-    prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
-  )
-}
+import { useFilterContext } from "../context/FilterContext"
 
 const Movies = () => {
   const { location } = useContext(LocationContext)
   const navigate = useNavigate()
-
-  const [selectedLanguages, setSelectedLanguages] = useState([])
-  const [selectedGenres, setSelectedGenres] = useState([])
-  const [selectedFormats, setSelectedFormats] = useState([])
+  const { selectedLanguages, selectedGenres, selectedFormats } = useFilterContext()
 
   const handler = (id, movieName) => {
     navigate(`/movies/${location}/${movieName}/${id}/ticket`)
@@ -32,15 +24,9 @@ const Movies = () => {
 
   const filteredMovies = useMemo(() => {
     return data?.allMovies?.filter((movie) => {
-      const languageMatch =
-        selectedLanguages.length === 0 ||
-        movie.languages?.some((l) => selectedLanguages.includes(l))
-      const genreMatch =
-        selectedGenres.length === 0 ||
-        movie.genre?.some((g) => selectedGenres.includes(g))
-      const formatMatch =
-        selectedFormats.length === 0 ||
-        movie.format?.some((f) => selectedFormats.includes(f))
+      const languageMatch = selectedLanguages.length === 0 ||movie.languages?.some((l) => selectedLanguages.includes(l))
+      const genreMatch = selectedGenres.length === 0 ||movie.genre?.some((g) => selectedGenres.includes(g))
+      const formatMatch =selectedFormats.length === 0 ||movie.format?.some((f) => selectedFormats.includes(f))
       return languageMatch && genreMatch && formatMatch
     })
   }, [data, selectedLanguages, selectedGenres, selectedFormats])
@@ -50,17 +36,7 @@ const Movies = () => {
       <Banner />
       <div className="max-w-7xl mx-auto px-4 py-8 flex gap-6">
         <div className="w-1/4">
-          <Filters
-            selectedLanguages={selectedLanguages}
-            selectedGenres={selectedGenres}
-            selectedFormats={selectedFormats}
-            onToggleLanguage={toggleInArray(setSelectedLanguages)}
-            onToggleGenre={toggleInArray(setSelectedGenres)}
-            onToggleFormat={toggleInArray(setSelectedFormats)}
-            onClearLanguages={() => setSelectedLanguages([])}
-            onClearGenres={() => setSelectedGenres([])}
-            onClearFormats={() => setSelectedFormats([])}
-          />
+          <Filters />
         </div>
         <div className="w-3/4">
           <h2 className="text-lg font-semibold mb-4">Now Showing</h2>

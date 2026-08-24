@@ -1,8 +1,11 @@
 import { filters, languages } from "../utils/constants"
+import { useFilterContext } from "../context/FilterContext"
 
 const GENRES = ["Action", "Drama", "Comedy", "Horror"]
 
-const Filters = ({selectedLanguages, selectedGenres, selectedFormats, onToggleLanguage,onToggleGenre,onToggleFormat,onClearLanguages,onClearGenres,onClearFormats,}) => {
+const Filters = () => {
+  const {selectedLanguages,selectedGenres,selectedFormats,toggleLanguage,toggleGenre,toggleFormat,clearLanguages,clearGenres,clearFormats,} = useFilterContext()
+
   return (
     <div className="w-full bg-white p-4 rounded-xl shadow-md h-fit">
       <h2 className="font-bold text-lg mb-4">Filters</h2>
@@ -10,7 +13,7 @@ const Filters = ({selectedLanguages, selectedGenres, selectedFormats, onToggleLa
         <div className="flex justify-between mb-2">
           <h3 className="font-semibold">Languages</h3>
           <span
-            onClick={onClearLanguages}
+            onClick={clearLanguages}
             className="text-red-500 text-sm cursor-pointer hover:underline">
             Clear
           </span>
@@ -20,7 +23,7 @@ const Filters = ({selectedLanguages, selectedGenres, selectedFormats, onToggleLa
           {languages.map((lang, i) => (
             <span
               key={i}
-              onClick={() => onToggleLanguage(lang)}
+              onClick={() => toggleLanguage(lang)}
               className={`px-3 py-1 text-sm border rounded-full cursor-pointer transition ${
                 selectedLanguages.includes(lang)
                   ? "bg-red-500 text-white border-red-500"
@@ -35,7 +38,7 @@ const Filters = ({selectedLanguages, selectedGenres, selectedFormats, onToggleLa
         <div className="flex justify-between mb-2">
           <h3 className="font-semibold">Genres</h3>
           <span
-            onClick={onClearGenres}
+            onClick={clearGenres}
             className="text-red-500 text-sm cursor-pointer hover:underline">
             Clear
           </span>
@@ -45,7 +48,7 @@ const Filters = ({selectedLanguages, selectedGenres, selectedFormats, onToggleLa
           {GENRES.map((g, i) => (
             <span
               key={i}
-              onClick={() => onToggleGenre(g)}
+              onClick={() => toggleGenre(g)}
               className={`px-3 py-1 text-sm border rounded-full cursor-pointer transition ${
                 selectedGenres.includes(g)
                   ? "bg-red-500 text-white border-red-500"
@@ -60,7 +63,7 @@ const Filters = ({selectedLanguages, selectedGenres, selectedFormats, onToggleLa
         <div className="flex justify-between mb-2">
           <h3 className="font-semibold">Format</h3>
           <span
-            onClick={onClearFormats}
+            onClick={clearFormats}
             className="text-red-500 text-sm cursor-pointer hover:underline">
             Clear
           </span>
@@ -70,7 +73,7 @@ const Filters = ({selectedLanguages, selectedGenres, selectedFormats, onToggleLa
           {filters.map((f, i) => (
             <span
               key={i}
-              onClick={() => onToggleFormat(f)}
+              onClick={() => toggleFormat(f)}
               className={`px-3 py-1 text-sm border rounded-full cursor-pointer transition ${
                 selectedFormats.includes(f)
                   ? "bg-red-500 text-white border-red-500"
