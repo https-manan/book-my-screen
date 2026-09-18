@@ -44,6 +44,12 @@ io.on('connection',(socket)=>{
 })
 
 
+
+app.get("/health", (_req, res) => {
+  res.json({ status: "ok" });
+});
+
+
 httpServer.listen(port,()=>{
     console.log(`listening on port :${port}`)
 })
