@@ -6,219 +6,114 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { socket } from "../utils/socket";
+import {razorpayScript} from '../utils/constants'
+
 
 const CheckOutpage = () => {
 
+   
+   function loadScript(src) {
+        return new Promise((resolve) => {
+            const script = document.createElement("script");
+            script.src = src;
+            script.onload = () => {
+            resolve(true);
+            };
+            script.onerror = () => {
+            resolve(false);
+            };
+            document.body.appendChild(script);
+        });
+    }
+
+    
     const { showId, state } = useParams();
-
     const navigate = useNavigate();
-
     const { selectedSeats } = useSeatContext();
-
-    const { user } = useSelector(
-        (s) => s.auth
-    );
-
-    const [timeLeft, setTimeLeft] =
-        useState(300);
-
-
-    const {
-        data,
-        isLoading,
-        error
-    } = useGetShowByIdQuery(
-        { id: showId },
-        { skip: !showId }
-    );
-
-
+    const { user } = useSelector((s) => s.auth);
+    const [timeLeft, setTimeLeft] =useState(300);
+    const {data,isLoading,error} = useGetShowByIdQuery({ id: showId },{ skip: !showId });
     /*
      * Unlock seats when timer expires.
      */
-
     useEffect(() => {
-
-        if (
-            !showId ||
-            !selectedSeats?.length ||
-            !user?._id
-        ) {
+        if (!showId ||!selectedSeats?.length ||!user?._id) {
             return;
         }
 
-
         const interval = setInterval(() => {
-
             setTimeLeft((prev) => {
-
                 if (prev <= 1) {
-
                     clearInterval(interval);
-
-
-                    const seatIds =
-                        selectedSeats.map(
-                            (seat) =>
-                                `${seat.row}-${seat.number}`
-                        );
-
-
-                    socket.emit(
-                        "unlock-seats",
-                        {
-                            showId,
-                            seatIds,
-                            userId: user._id
-                        }
-                    );
-
-
-                    toast.error(
-                        "Time expired!"
-                    );
-
+                    const seatIds =selectedSeats.map((seat) =>`${seat.row}-${seat.number}`);
+                    socket.emit("unlock-seats",{showId,seatIds,userId: user._id});
+                    toast.error("Time expired!");
                     navigate("/");
-
                     return 0;
                 }
-
-
                 return prev - 1;
             });
-
         }, 1000);
-
 
         return () => {
             clearInterval(interval);
         };
-
-    }, [
-        showId,
-        selectedSeats,
-        user?._id,
-        navigate
-    ]);
-
+    },[showId,selectedSeats,user?._id, navigate]);
 
     if (isLoading) {
-
         return (
-
             <div className="min-h-screen flex justify-center items-center">
-
                 <Loader2
                     className="animate-spin"
                     size={36}
                 />
-
             </div>
         );
     }
 
-
     if (error) {
-
         return (
-
             <div className="min-h-screen flex flex-col justify-center items-center gap-4">
-
                 <p className="text-gray-500">
                     Couldn't load your booking.
                     Please go back and try again.
                 </p>
-
-
                 <button
                     onClick={() => navigate(-1)}
-                    className="bg-black text-white px-6 py-2 rounded-md"
-                >
+                    className="bg-black text-white px-6 py-2 rounded-md">
                     Go back
                 </button>
-
             </div>
         );
     }
 
-
-    if (
-        !selectedSeats ||
-        selectedSeats.length === 0
-    ) {
-
+    if (!selectedSeats ||selectedSeats.length === 0) {
         return (
-
             <div className="min-h-screen flex flex-col justify-center items-center gap-4">
-
                 <p className="text-gray-500">
                     No seats selected.
                 </p>
-
-
                 <button
                     onClick={() => navigate(-1)}
-                    className="bg-black text-white px-6 py-2 rounded-md"
-                >
+                    className="bg-black text-white px-6 py-2 rounded-md">
                     Go back and select seats
                 </button>
-
             </div>
         );
     }
 
 
     const show = data?.show;
-
-
-    const orderAmount =
-        selectedSeats.reduce(
-            (sum, seat) =>
-                sum + seat.price,
-            0
-        );
-
-
+    const orderAmount =selectedSeats.reduce((sum, seat) =>sum + seat.price,0);
     const taxesAndFees = 0;
-
-
-    const totalPayable =
-        orderAmount +
-        taxesAndFees;
-
-
-    const seatsByType =
-        selectedSeats.reduce(
-            (acc, seat) => {
-
-                if (!acc[seat.type]) {
-                    acc[seat.type] = [];
-                }
-
-                acc[seat.type].push(
-                    `${seat.row}${seat.number}`
-                );
-
+    const totalPayable = orderAmount + taxesAndFees;
+    const seatsByType =selectedSeats.reduce((acc, seat) => {
+                if (!acc[seat.type]) {acc[seat.type] = [];}acc[seat.type].push(`${seat.row}${seat.number}`);
                 return acc;
-
-            },
-            {}
-        );
-
-
-    const minutes =
-        Math.floor(timeLeft / 60);
-
-    const seconds =
-        timeLeft % 60;
-
-
-    const showDateTime =
-        show?.startTime
-            ? `${new Date(
-                show.startTime
-            ).toLocaleDateString(
-                "en-US",
+            },{});
+    const minutes =Math.floor(timeLeft / 60);
+    const seconds =timeLeft % 60;
+    const showDateTime =show?.startTime? `${new Date(show.startTime).toLocaleDateString("en-US",
                 {
                     day: "2-digit",
                     month: "short"
@@ -242,9 +137,29 @@ const CheckOutpage = () => {
         );
     };
 
+    /* Payment gateway code here */
+
+    const handelBookSeat=async()=>{
+        try {
+            const res=loadScript(razorpayScript);
+            if(!res) {
+            toast.error("Razorpay SDK failed to load. Are you online?", {
+                variant: "warning",
+            });
+                return;
+            }
+            const reqData = {
+                amount : total
+            }
+            //call API to create the order
+        } catch (error) {
+            console.log(error)
+            toast.error(error);
+        }
+    }
+
 
     return (
-
         <div className="min-h-screen bg-gray-100">
 
             {/* Header */}
@@ -253,181 +168,105 @@ const CheckOutpage = () => {
 
                 <div
                     className="font-bold text-lg cursor-pointer"
-                    onClick={() => navigate("/")}
-                >
+                    onClick={() => navigate("/")}>
                     Logo
                 </div>
-
 
                 <h1 className="font-semibold text-lg">
                     Review your booking
                 </h1>
-
 
                 <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-sm font-medium text-gray-700">
 
                     {user?.name
                         ?.charAt(0)
                         ?.toUpperCase()}
-
                 </div>
-
             </div>
-
 
             {/* Main */}
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
-
                 {/* Timer */}
-
                 <p className="md:col-span-3 text-center font-medium text-red-500">
 
                     Time left:{" "}
-
                     {String(minutes).padStart(
                         2,
                         "0"
                     )}
-
                     :
-
                     {String(seconds).padStart(
                         2,
                         "0"
                     )}
-
                 </p>
 
-
                 {/* LEFT SECTION */}
-
                 <div className="md:col-span-2 space-y-6">
-
                     {/* Movie Card */}
-
                     <div className="flex gap-4 bg-white p-4 rounded-lg shadow">
-
                         {show?.movie?.posterUrl?.secure_url ? (
-
-                            <img
-                                src={
-                                    show.movie
-                                        .posterUrl
-                                        .secure_url
-                                }
-                                alt={
-                                    show.movie.title
-                                }
+                            <img src={show.movie.posterUrl.secure_url}alt={show.movie.title}
                                 className="w-16 h-20 object-cover rounded"
-                            />
-
-                        ) : (
-
+                            />):(
                             <div className="w-16 h-20 bg-gray-300 rounded">
                             </div>
-
                         )}
-
-
                         <div>
-
                             <h2 className="font-semibold">
                                 {show?.movie?.title}
                             </h2>
-
-
                             <p className="text-sm text-gray-500">
-
                                 {show?.movie?.certification}
-
                                 {" • "}
-
                                 {show?.movie?.languages?.join(
                                     ", "
                                 )}
-
                                 {" • "}
-
                                 {show?.format}
-
                             </p>
-
 
                             <p className="text-sm text-gray-500">
-
                                 {show?.theater?.name}
-
-                                {show?.theater?.location
-                                    ? `, ${show.theater.location}`
-                                    : ""}
-
+                                {show?.theater?.location? `, ${show.theater.location}`: ""}
                             </p>
-
                         </div>
-
                     </div>
 
-
                     {/* Booking Info */}
-
                     <div className="bg-white p-4 rounded-lg shadow space-y-4">
-
                         <div className="flex justify-between text-sm">
-
                             <p>
                                 {showDateTime}
                             </p>
-
                             <p className="font-medium">
                                 ₹{orderAmount.toFixed(2)}
                             </p>
-
                         </div>
 
-
                         <div>
-
                             <p className="text-sm font-medium">
-
-                                {selectedSeats.length} ticket
-                                {selectedSeats.length !== 1
-                                    ? "s"
-                                    : ""}
-
+                                {selectedSeats.length} ticket {selectedSeats.length !== 1? "s": ""}
                             </p>
 
-
-                            {Object.entries(
-                                seatsByType
-                            ).map(
-                                ([type, seats]) => (
-
+                            {Object.entries(seatsByType).map(([type, seats]) => (
                                     <p
                                         key={type}
-                                        className="text-xs text-gray-500"
-                                    >
-
+                                        className="text-xs text-gray-500">
                                         {type}
                                         {" - "}
                                         {seats.join(
                                             ", "
                                         )}
-
                                     </p>
-
                                 )
                             )}
-
                         </div>
-
 
                         <div className="bg-yellow-100 text-yellow-700 text-sm p-3 rounded">
-
                             This theatre doesn't allow cancellation
-
                         </div>
-
 
                         <div className="flex justify-between items-center text-sm">
 
@@ -457,49 +296,31 @@ const CheckOutpage = () => {
                         <h3 className="font-medium">
                             Payment summary
                         </h3>
-
-
                         <div className="flex justify-between text-sm">
-
                             <p>
                                 Order amount
                             </p>
-
                             <p>
                                 ₹{orderAmount.toFixed(2)}
                             </p>
-
                         </div>
-
-
                         <div className="flex justify-between text-sm">
-
                             <p>
                                 Taxes & fees
                             </p>
-
                             <p>
                                 ₹{taxesAndFees.toFixed(2)}
                             </p>
-
                         </div>
-
-
                         <hr />
-
-
                         <div className="flex justify-between font-medium">
-
                             <p>
                                 To be paid
                             </p>
-
                             <p>
                                 ₹{totalPayable.toFixed(2)}
                             </p>
-
                         </div>
-
                     </div>
 
 
@@ -518,23 +339,15 @@ const CheckOutpage = () => {
 
 
                         <p className="text-sm text-gray-500">
-
-                            {user?.phone
-                                ? `+91-${user.phone}`
-                                : ""}
-
+                            {user?.phone? `+91-${user.phone}` : ""}
                         </p>
-
 
                         <p className="text-sm text-gray-500">
                             {user?.email}
                         </p>
-
-
                         <p className="text-sm text-gray-500">
                             {state}
                         </p>
-
                     </div>
 
 

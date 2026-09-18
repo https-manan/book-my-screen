@@ -5,76 +5,15 @@ import { Theater } from "../modules/theater/theaterModel";
 import { uploadImage } from "../cloudinary/cloudinaryEndPoints";
 
 const theaters = [
-  {
-    name: "PVR Cinemas",
-    location: "Plot No. 12, Sector 18, Noida",
-    city: "Noida",
-    state: "Uttar Pradesh",
-    logoSeed: "pvr",
-  },
-  {
-    name: "INOX Movies",
-    location: "GIP Mall, Sector 38A, Noida",
-    city: "Noida",
-    state: "Uttar Pradesh",
-    logoSeed: "inox",
-  },
-  {
-    name: "Cinepolis",
-    location: "DLF Mall of India, Sector 18, Noida",
-    city: "Noida",
-    state: "Uttar Pradesh",
-    logoSeed: "cinepolis",
-  },
-  {
-    name: "PVR Director's Cut",
-    location: "Ambience Mall, Vasant Kunj, New Delhi",
-    city: "New Delhi",
-    state: "Delhi",
-    logoSeed: "pvrdirector",
-  },
-  {
-    name: "INOX Naraina",
-    location: "Naraina Vihar, New Delhi",
-    city: "New Delhi",
-    state: "Delhi",
-    logoSeed: "inoxnaraina",
-  },
-  {
-    name: "Carnival Cinemas",
-    location: "Fun Republic Mall, Andheri West, Mumbai",
-    city: "Mumbai",
-    state: "Maharashtra",
-    logoSeed: "carnival",
-  },
-  {
-    name: "PVR Icon",
-    location: "Oberoi Mall, Goregaon East, Mumbai",
-    city: "Mumbai",
-    state: "Maharashtra",
-    logoSeed: "pvricon",
-  },
-  {
-    name: "INOX Garuda Mall",
-    location: "Magrath Road, Ashok Nagar, Bangalore",
-    city: "Bangalore",
-    state: "Karnataka",
-    logoSeed: "inoxgaruda",
-  },
-  {
-    name: "PVR Forum Mall",
-    location: "Koramangala, Bangalore",
-    city: "Bangalore",
-    state: "Karnataka",
-    logoSeed: "pvrforum",
-  },
-  {
-    name: "SPI Cinemas",
-    location: "Express Avenue Mall, Royapettah, Chennai",
-    city: "Chennai",
-    state: "Tamil Nadu",
-    logoSeed: "spi",
-  },
+  { name: "PVR Cinemas", location: "Plot No. 12, Sector 18, Noida", city: "Noida", state: "Uttar Pradesh", logoSeed: "pvr" },
+  { name: "INOX Movies", location: "GIP Mall, Sector 38A, Noida", city: "Noida", state: "Uttar Pradesh", logoSeed: "inox" },
+  { name: "Cinepolis", location: "DLF Mall of India, Sector 18, Noida", city: "Noida", state: "Uttar Pradesh", logoSeed: "cinepolis" },
+  { name: "PVR Director's Cut", location: "Ambience Mall, Vasant Kunj, New Delhi", city: "New Delhi", state: "Delhi", logoSeed: "pvrdirector" },
+  { name: "INOX Naraina", location: "Naraina Vihar, New Delhi", city: "New Delhi", state: "Delhi", logoSeed: "inoxnaraina" },
+  { name: "Carnival Cinemas", location: "Fun Republic Mall, Andheri West, Mumbai", city: "Mumbai", state: "Maharashtra", logoSeed: "carnival" },
+  { name: "PVR Icon", location: "Oberoi Mall, Goregaon East, Mumbai", city: "Mumbai", state: "Maharashtra", logoSeed: "pvricon" },
+  { name: "INOX Garuda Mall", location: "Magrath Road, Ashok Nagar, Bangalore", city: "Bangalore", state: "Karnataka", logoSeed: "inoxgaruda" },
+  { name: "PVR Forum Mall", location: "Koramangala, Bangalore", city: "Bangalore", state: "Karnataka", logoSeed: "pvrforum" },
 ];
 
 const seed = async () => {

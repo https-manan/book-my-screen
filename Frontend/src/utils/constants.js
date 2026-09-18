@@ -23,6 +23,13 @@ import inox from "../assets/inox.avif";
 import pvr from "../assets/pvr.avif";
 import cinepolis from "../assets/cinepolis.avif";
 
+
+
+export const razorpayScript='https://checkout.razorpay.com/v1/checkout.js'
+
+
+
+
 export const languages = [
   "Hindi",
   "English",

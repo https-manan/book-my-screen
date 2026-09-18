@@ -1,10 +1,6 @@
 import Redis from "ioredis";
 
-const redis=new Redis({
-    host:process.env.REDIS_HOST,
-    port:parseInt(process.env.REDIS_PORT||"6379"),
-    retryStrategy:()=>5000   //hr 5 sec mai refetch the redis server
-});
+const redis = new Redis(process.env.REDIS_URL!);
 
 
 redis.on('error',(err)=>{

@@ -26,21 +26,12 @@ export const isVerifiedUser = async (req: Request, res: Response, next: NextFunc
     try {
         const { accessToken } = req.cookies;
         if (!accessToken) {
-            // was status 300 — that's an HTTP redirection code, not an auth
-            // failure code. 401 Unauthorized is correct here.
             return res.status(401).json({
                 msg: "Unauthorized ascess"
             })
         }
         let decodeToken: MyJwtPayload;
         try {
-            // jwt.verify() THROWS on an expired/invalid token (TokenExpiredError /
-            // JsonWebTokenError) — it doesn't return null/false. The old code
-            // relied on `if (!decodeToken)` after this call, which was dead code:
-            // any bad token skipped straight past it into the outer catch below,
-            // which returns 500. Since api.js's reauth logic only triggers a
-            // refresh on a 401, expired access tokens were never actually
-            // reaching the refresh flow — they just surfaced as a generic error.
             decodeToken = jwt.verify(accessToken, process.env.JWT_SECRET as string) as MyJwtPayload;
         } catch (err) {
             return res.status(401).json({

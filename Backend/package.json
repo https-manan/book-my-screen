@@ -4,10 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "seed:movie": "ts-node src/scripts/seed-movies.ts",
-    "seed:theater": "ts-node src/scripts/seed-theater.ts",
-    "seed:show": "ts-node src/scripts/seed-shows.ts"
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "build": "tsc",
+      "start": "node dist/server.js",
+      "seed:movie": "ts-node src/scripts/seed-movies.ts",
+      "seed:theater": "ts-node src/scripts/seed-theater.ts",
+      "seed:show": "ts-node src/scripts/seed-shows.ts"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +19,7 @@
     "cloudinary": "^2.9.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
+    "crypto": "^1.0.1",
     "dotenv": "^17.4.1",
     "express": "^5.2.1",
     "ioredis": "^6.0.0",
@@ -28,6 +31,7 @@
     "nodemailer": "^8.0.5",
     "nodemon": "^3.1.14",
     "otp-generator": "^4.0.1",
+    "razorpay": "^2.9.8",
     "socket.io": "^4.8.3",
     "zod": "^4.3.6"
   },
