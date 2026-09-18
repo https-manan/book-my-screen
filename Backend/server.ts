@@ -12,13 +12,29 @@ import "./src/config/redis"
 import { Server } from 'socket.io';
 import { registerSocketHandler } from './src/socket/sockethandler';
 
+
 connectDb();
 
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || "http://localhost:5173";
+
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: CLIENT_ORIGIN,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"]
 }));
+
+const httpServer= http.createServer(app) 
+
+
+const io = new Server(httpServer, {
+    cors: {
+        origin: CLIENT_ORIGIN,
+        methods: ["GET", "POST"],
+        credentials: true
+    }
+})
+
+
 app.use(express.json());
 app.use(cookieParser());
 app.use('/app/api/v1',router);
@@ -26,14 +42,7 @@ app.use('/app/api/v1',router);
 
 //Here we gonna create the socket server
 
-const httpServer= http.createServer(app)  //app.listen bhi httpServer pr he hoga same as that of socket server
-const io=new Server(httpServer,{
-    cors:{
-        origin:'http://localhost:5173',
-        methods:["GET","POST"],
-        credentials:true
-    }
-})
+ //app.listen bhi httpServer pr he hoga same as that of socket server
 
 io.on('connection',(socket)=>{
     console.log("socket server connected with socketId"+socket.id)
