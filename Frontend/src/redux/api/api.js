@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { Mutex } from 'async-mutex'
 
-const USER_API = 'http://localhost:8080/app/api/v1/';
+const USER_API = import.meta.env.VITE_API_URL || 'http://localhost:8080/app/api/v1/';
 
 // plain baseQuery, same as what you already had
 const baseQuery = fetchBaseQuery({
