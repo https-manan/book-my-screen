@@ -8,7 +8,7 @@ import MovieDetails from './components/MovieDetails'
 import BookingHistory from './components/BookingHistory'
 import SeatLayout from './components/SeatLayout'
 import CheckOutpage from './components/CheckOutpage'
-import Authlogin from './components/common/authlogin'
+import Authlogin from './components/common/AuthLogin'
 import { Toaster } from 'sonner'
 
 
